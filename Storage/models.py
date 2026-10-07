@@ -13,6 +13,7 @@ class Base(DeclarativeBase):
 class Activity(Base):
     __tablename__ = "activity"
 
+    # mapped column connect to SQL language
     id = mapped_column(Integer, primary_key=True)
     trace_id = mapped_column(BigInteger)
     device_id = mapped_column(String(50))
