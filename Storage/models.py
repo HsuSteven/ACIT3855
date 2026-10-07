@@ -2,6 +2,7 @@ from datetime import datetime, UTC
 from sqlalchemy import create_engine, Integer, BigInteger, String, DateTime
 from sqlalchemy.orm import DeclarativeBase, mapped_column, sessionmaker
 
+# pymysql to connect to MySQL
 ENGINE = create_engine("mysql+pymysql://shsu:password@localhost:3306/fitness_db", connect_args={"ssl_disabled": True}, pool_pre_ping=True)
 
 def make_session():
@@ -13,7 +14,7 @@ class Base(DeclarativeBase):
 class Activity(Base):
     __tablename__ = "activity"
 
-    # mapped column connect to SQL language
+    # mapped column SQL Alchemy function to map class to db
     id = mapped_column(Integer, primary_key=True)
     trace_id = mapped_column(BigInteger)
     device_id = mapped_column(String(50))
