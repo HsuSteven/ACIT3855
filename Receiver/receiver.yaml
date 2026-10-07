@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  description: This API receives health and fitness data from Smart Watches.
+  version: "1.0.0"
+  title: Fitness NEAT Tracker
+paths:
+  /health/activity:
+    post:
+      summary: Reports a non-exercise activity
+      operationId: receiver.report_activity
+      description: Adds an activity event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityRecord'
+      responses:
+        '201':
+          description: Activity event successfully received
+        '400':
+          description: 'invalid input, object invalid'
+    
+  /health/exercises:
+    post:
+      summary: Reports an exercise session
+      operationId: receiver.report_exercises
+      description: Adds an exercise event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExerciseRecord'
+      responses:
+        '201':
+          description: Exercise event successfully received
+        '400':
+          description: 'invalid input, object invalid'
+
+components:
+  schemas:
+    ActivityRecord:
+      required:
+        - device_id
+        - timestamp
+        - step_count
+        - calories_burned
+        - avg_heart_rate
+      properties:
+        device_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-11T09:12:33.001Z"
+        step_count:
+          type: integer
+          example: 1250
+        calories_burned:
+          type: integer
+          example: 45
+        avg_heart_rate:
+          type: integer
+          example: 85
+      type: object
+
+    ExerciseRecord:
+      required:
+        - device_id
+        - timestamp
+        - calories_burned
+        - duration
+        - exercise_type
+        - avg_heart_rate
+      properties:
+        device_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-11T14:12:33.001Z"
+        calories_burned:
+          type: number
+          example: 320.5
+        duration:
+          type: integer
+          description: duration of the exercise in seconds
+          example: 2730
+        exercise_type:
+          type: string
+          description: the type of exercise
+          enum:
+            - cardio
+            - strength
+          example: cardio
+        avg_heart_rate:
+          type: integer
+          example: 145
+      type: object

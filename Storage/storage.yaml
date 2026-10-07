@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Smart Watch Storage API
+  description: Storage service to persist smartwatch events in a database
+  version: "1.0.0"
+
+paths:
+  /health/activity:
+    post:
+      summary: Stores a non-exercise activity record
+      operationId: storage.store_activity
+      description: Persists an activity record to SQLite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityRecord'
+      responses:
+        '201':
+          description: Activity record successfully saved
+        '400':
+          description: 'invalid input, object invalid'
+
+  /health/exercises:
+    post:
+      summary: Stores an exercise session
+      operationId: storage.store_exercises
+      description: Persists an exercise record to SQLite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExerciseRecord'
+      responses:
+        '201':
+          description: Exercise record successfully saved
+        '400':
+          description: 'invalid input, object invalid'
+
+components:
+  schemas:
+    ActivityRecord:
+      required:
+        - trace_id
+        - device_id
+        - timestamp
+        - step_count
+        - calories_burned
+        - avg_heart_rate
+      properties:
+        trace_id:
+          type: integer
+          format: int64
+          example: 1727738912345678901
+        device_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-11T09:12:33.001Z"
+        step_count:
+          type: integer
+          example: 1250
+        calories_burned:
+          type: integer
+          example: 45
+        avg_heart_rate:
+          type: integer
+          example: 85
+      type: object
+
+    ExerciseRecord:
+      required:
+        - trace_id
+        - device_id
+        - timestamp
+        - calories_burned
+        - duration
+        - exercise_type
+        - avg_heart_rate
+      properties:
+        trace_id:
+          type: integer
+          format: int64
+          example: 1727738912345678901
+        device_id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-11T14:12:33.001Z"
+        calories_burned:
+          type: integer
+          example: 320
+        duration:
+          type: integer
+          description: duration of the exercise in seconds
+          example: 2730
+        exercise_type:
+          type: string
+          description: the type of exercise
+          enum:
+            - cardio
+            - strength
+          example: cardio
+        avg_heart_rate:
+          type: integer
+          example: 145
+      type: object

@@ -1,0 +1,24 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+app.log
+
+# JMeter output & temporary files
+results.jtl
+report/
+
+# SQLite (from previous labs)
+*.db
+*.sqlite3
+
+# IDE / Editor folders
+.vscode/
+.idea/
