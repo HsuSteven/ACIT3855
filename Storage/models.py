@@ -1,10 +1,15 @@
+import os
+
 from datetime import datetime, UTC
 from sqlalchemy import create_engine, Integer, BigInteger, String, DateTime
 from sqlalchemy.orm import DeclarativeBase, mapped_column, sessionmaker
 
 # pymysql to connect to MySQL
-ENGINE = create_engine("mysql+pymysql://shsu:password@localhost:3306/fitness_db", connect_args={"ssl_disabled": True}, pool_pre_ping=True)
+DEFAULT_DB_URL = "mysql+pymysql://shsu:password@localhost:3306/fitness_db"
+DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB_URL)
 
+
+ENGINE = create_engine(DATABASE_URL,connect_args={"ssl_disabled": True},pool_pre_ping=True)
 def make_session():
     return sessionmaker(bind=ENGINE)()
 

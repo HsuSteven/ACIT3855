@@ -3,6 +3,7 @@ import logging
 import logging.config
 import yaml
 import connexion
+import os
 from connexion import NoContent
 import requests
 
@@ -13,7 +14,7 @@ logging.config.dictConfig(LOG_CONFIG)
 
 logger = logging.getLogger("receiver")
 
-STORAGE_SERVICE_URL = "http://localhost:8090"
+STORAGE_SERVICE_URL = os.getenv("STORAGE_SERVICE_URL", "http://localhost:8090")
 
 def report_activity(body):
     trace_id = time.time_ns()
