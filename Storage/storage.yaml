@@ -20,6 +20,39 @@ paths:
           description: Activity record successfully saved
         '400':
           description: 'invalid input, object invalid'
+    get:
+          summary: Gets activity events recorded within a timestamp range
+          operationId: storage.get_activity
+          description: Retrieves activity records where recorded_timestamp > start_timestamp and recorded_timestamp <= end_timestamp
+          parameters:
+            - name: start_timestamp
+              in: query
+              description: Slicing start timestamp (exclusive)
+              required: true
+              schema:
+                type: string
+                format: date-time
+                example: "2026-10-24T00:00:00Z"
+            - name: end_timestamp
+              in: query
+              description: Slicing end timestamp (inclusive)
+              required: true
+              schema:
+                type: string
+                format: date-time
+                example: "2026-10-24T23:59:59Z"
+          responses:
+            '200':
+              description: Successfully retrieved activity events
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActivityRecord'
+            '400':
+              description: Invalid request parameters
+
 
   /health/exercises:
     post:
@@ -36,6 +69,40 @@ paths:
           description: Exercise record successfully saved
         '400':
           description: 'invalid input, object invalid'
+
+    get:
+          summary: Gets exercise events recorded within a timestamp range
+          operationId: storage.get_exercises
+          description: Retrieves exercise records where recorded_timestamp > start_timestamp and recorded_timestamp <= end_timestamp
+          parameters:
+            - name: start_timestamp
+              in: query
+              description: Slicing start timestamp (exclusive)
+              required: true
+              schema:
+                type: string
+                format: date-time
+                example: "2026-10-24T00:00:00Z"
+            - name: end_timestamp
+              in: query
+              description: Slicing end timestamp (inclusive)
+              required: true
+              schema:
+                type: string
+                format: date-time
+                example: "2026-10-24T23:59:59Z"
+          responses:
+            '200':
+              description: Successfully retrieved exercise events
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExerciseRecord'
+            '400':
+              description: Invalid request parameters
+
 
 components:
   schemas:
