@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: NEAT Processing & Statistics Service API
+  description: Aggregates wearable activity and exercise telemetry
+  version: "1.0.0"
+
+paths:
+  /stats:
+    get:
+      summary: Gets cumulative NEAT statistics
+      operationId: processing.get_stats
+      description: Returns separate aggregated totals and averages for passive activity and structured workouts
+      responses:
+        '200':
+          description: Successfully retrieved statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+
+components:
+  schemas:
+    StatsResponse:
+      type: object
+      required:
+        - num_activity_events
+        - total_step_count
+        - avg_steps_per_event
+        - avg_activity_heart_rate
+        - last_updated_activity
+        - num_exercise_events
+        - total_exercise_duration
+        - avg_exercise_duration
+        - avg_exercise_heart_rate
+        - last_updated_exercise
+      properties:
+        num_activity_events:
+          type: integer
+          example: 50
+        total_step_count:
+          type: integer
+          example: 125000
+        avg_steps_per_event:
+          type: number
+          format: float
+          example: 2500.0
+        avg_activity_heart_rate:
+          type: number
+          format: float
+          example: 76.4
+        last_updated_activity:
+          type: string
+          example: "2026-10-25T12:00:00"
+        num_exercise_events:
+          type: integer
+          example: 10
+        total_exercise_duration:
+          type: integer
+          example: 18000
+        avg_exercise_duration:
+          type: number
+          format: float
+          example: 1800.0
+        avg_exercise_heart_rate:
+          type: number
+          format: float
+          example: 142.8
+        last_updated_exercise:
+          type: string
+          example: "2026-10-25T12:00:00"

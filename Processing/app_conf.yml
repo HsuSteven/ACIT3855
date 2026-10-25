@@ -1,0 +1,7 @@
+version: 1
+eventstore:
+  url: "http://storage:8090"
+polling:
+  interval_seconds: 5
+storage:
+  stats_file: "stats.json"
