@@ -39,5 +39,20 @@ services:
     ports:
       - "8080:8080"
 
+  processing:
+    build:
+      context: Processing
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      STORAGE_SERVICE_URL: http://storage:8090
+    depends_on:
+      - storage
+    ports:
+      - "8100:8100"
+    volumes:
+      # Bind mount stats.json so updates persist and can be viewed directly in VS Code
+      - ./Processing/stats.json:/app/stats.json
+
 volumes:
   mysql_data:

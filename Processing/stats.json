@@ -1,12 +1,12 @@
 {
-  "num_activity_events": 0,
-  "total_step_count": 0,
-  "avg_steps_per_event": 0.0,
-  "avg_activity_heart_rate": 0.0,
-  "last_updated_activity": "2026-01-01T00:00:00",
-  "num_exercise_events": 0,
-  "total_exercise_duration": 0,
-  "avg_exercise_duration": 0.0,
-  "avg_exercise_heart_rate": 0.0,
-  "last_updated_exercise": "2026-01-01T00:00:00"
+  "num_activity_events": 42,
+  "total_step_count": 104485,
+  "avg_steps_per_event": 2487.7,
+  "avg_activity_heart_rate": 92.4,
+  "last_updated_activity": "2026-10-25T17:25:08",
+  "num_exercise_events": 41,
+  "total_exercise_duration": 123978,
+  "avg_exercise_duration": 3023.9,
+  "avg_exercise_heart_rate": 147.3,
+  "last_updated_exercise": "2026-10-25T17:25:08"
 }
