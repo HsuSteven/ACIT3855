@@ -68,7 +68,7 @@ async def update_loop():
     while True:
         try:
             stats = load_statistics()
-            now_str = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S")
+            now_str = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")
 
 
             # Acitivity processing
