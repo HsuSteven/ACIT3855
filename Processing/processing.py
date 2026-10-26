@@ -32,12 +32,12 @@ def load_statistics() -> dict:
         "total_step_count": 0,
         "avg_steps_per_event": 0.0,
         "avg_activity_heart_rate": 0.0,
-        "last_updated_activity": "2026-01-01T00:00:00",
+        "last_updated_activity": "2026-01-01T00:00:00.000000",
         "num_exercise_events": 0,
         "total_exercise_duration": 0,
         "avg_exercise_duration": 0.0,
         "avg_exercise_heart_rate": 0.0,
-        "last_updated_exercise": "2026-01-01T00:00:00",
+        "last_updated_exercise": "2026-01-01T00:00:00.000000",
     }
     if not os.path.exists(STATS_FILE):
         return default_stats
