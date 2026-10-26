@@ -38,6 +38,8 @@ services:
       - storage
     ports:
       - "8080:8080"
+    volumes:
+      - ./Receiver/app.log:/app/app.log
 
   processing:
     build:

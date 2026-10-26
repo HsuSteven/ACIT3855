@@ -2,6 +2,7 @@ import os
 from datetime import datetime, UTC
 from sqlalchemy import create_engine, Integer, BigInteger, String, DateTime
 from sqlalchemy.orm import DeclarativeBase, mapped_column, sessionmaker
+from sqlalchemy.dialects.mysql import DATETIME
 
 # pymysql to connect to MySQL
 DEFAULT_DB_URL = "mysql+pymysql://shsu:password@localhost:3306/fitness_db"
@@ -29,7 +30,7 @@ class Activity(Base):
     step_count = mapped_column(Integer)
     calories_burned = mapped_column(Integer)
     avg_heart_rate = mapped_column(Integer)
-    recorded_timestamp = mapped_column(DateTime(6), default=lambda: datetime.now(UTC))
+    recorded_timestamp = mapped_column(DATETIME(fsp=6), default=lambda: datetime.now(UTC))
 
     def to_dict(self):
         return {
@@ -54,7 +55,7 @@ class Exercise(Base):
     duration = mapped_column(Integer)
     exercise_type = mapped_column(String(50))
     avg_heart_rate = mapped_column(Integer)
-    recorded_timestamp = mapped_column(DateTime(6), default=lambda: datetime.now(UTC))
+    recorded_timestamp = mapped_column(DATETIME(fsp=6), default=lambda: datetime.now(UTC))
 
     def to_dict(self):
         return {
