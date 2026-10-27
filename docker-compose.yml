@@ -1,3 +1,7 @@
+#sql persistent dadatta
+volumes:
+  mysql_data:
+
 services:
   db:
     image: mysql:8.0
@@ -7,7 +11,7 @@ services:
       MYSQL_DATABASE: fitness_db
       MYSQL_USER: shsu
       MYSQL_PASSWORD: password
-      TZ: America/Vancouver
+      TZ: UTC
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -53,8 +57,4 @@ services:
     ports:
       - "8100:8100"
     volumes:
-      # Bind mount stats.json so updates persist and can be viewed directly in VS Code
       - ./Processing/stats.json:/app/stats.json
-
-volumes:
-  mysql_data:
