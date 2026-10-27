@@ -7,7 +7,7 @@ import connexion
 from connexion import NoContent
 from models import make_session, Activity, Exercise
 
-# 1. Load logging configuration
+# Load logging configuration
 with open("log_conf.yml", "r") as f:
     LOG_CONFIG = yaml.safe_load(f.read())
 logging.config.dictConfig(LOG_CONFIG)
@@ -26,10 +26,7 @@ def use_db_session(func):
     return wrapper
 
 
-# ==========================================
-# POST Endpoints (Storing incoming events)
-# ==========================================
-
+# POST endpoints
 @use_db_session
 def store_activity(session, body):
     activity_record = Activity(
@@ -65,16 +62,12 @@ def store_exercises(session, body):
     return NoContent, 201
 
 
-# ==========================================
-# GET Endpoints (Slicing events by timestamp)
-# ==========================================
+# GET endpoints
 
 @use_db_session
 def get_activity(session, start_timestamp, end_timestamp):
-    """
-    Retrieves activity events where start_timestamp < recorded_timestamp <= end_timestamp
-    """
-    # Parse ISO strings into datetime objects (handling UTC 'Z' or offset if passed as string)
+    #Retrieves activity events where start_timestamp < recorded_timestamp <= end_timestamp
+    # Parse ISO strings into datetime objects
     start_dt = (
         datetime.fromisoformat(start_timestamp.replace("Z", "+00:00"))
         if isinstance(start_timestamp, str)
@@ -105,9 +98,8 @@ def get_activity(session, start_timestamp, end_timestamp):
 
 @use_db_session
 def get_exercises(session, start_timestamp, end_timestamp):
-    """
-    Retrieves exercise events where start_timestamp < recorded_timestamp <= end_timestamp
-    """
+
+    #Retrieves exercise events where start_timestamp < recorded_timestamp <= end_timestamp
     start_dt = (
         datetime.fromisoformat(start_timestamp.replace("Z", "+00:00"))
         if isinstance(start_timestamp, str)
