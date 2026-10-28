@@ -27,7 +27,7 @@ POLL_INTERVAL = APP_CONFIG["polling"]["interval_seconds"]
 
 
 
-def load_statistics() -> dict:
+def load_statistics():
     default_stats = {
         "num_activity_events": 0,
         "total_step_count": 0,
