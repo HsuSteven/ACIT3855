@@ -1,6 +1,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 from datetime import datetime, UTC
+from pathlib import Path
 import json
 import logging
 import logging.config
@@ -51,13 +52,16 @@ def load_statistics() -> dict:
 
 
 def save_statistics(stats: dict):
-    # Writes statistics to json file
+    original = Path(STATS_FILE)
+    temp = original.with_suffix(".tmp")
     try:
-        with open(STATS_FILE, "w") as f:
+        #temp file
+        with temp.open("w") as f:
             json.dump(stats, f, indent=2)
+        temp.replace(original)
+
     except Exception as e:
         logger.error(f"Failed to write statistics to {STATS_FILE}: {e}")
-
 
 
 # loop hecking for updates every 5 seconds
