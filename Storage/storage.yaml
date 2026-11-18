@@ -1,108 +1,77 @@
 openapi: 3.0.3
 info:
   title: Smart Watch Storage API
-  description: Storage service to persist smartwatch events in a database
+  description: Storage service to retrieve smartwatch events from the database
   version: "1.0.0"
 
 paths:
   /health/activity:
-    post:
-      summary: Stores a non-exercise activity record
-      operationId: storage.store_activity
-      description: Persists an activity record to SQLite
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ActivityRecord'
-      responses:
-        '201':
-          description: Activity record successfully saved
-        '400':
-          description: 'invalid input, object invalid'
     get:
-          summary: Gets activity events recorded within a timestamp range
-          operationId: storage.get_activity
-          description: Retrieves activity records where recorded_timestamp > start_timestamp and recorded_timestamp <= end_timestamp
-          parameters:
-            - name: start_timestamp
-              in: query
-              description: Slicing start timestamp (exclusive)
-              required: true
+      summary: Gets activity events recorded within a timestamp range
+      operationId: storage.get_activity
+      description: Retrieves activity records where recorded_timestamp > start_timestamp and recorded_timestamp <= end_timestamp
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: Slicing start timestamp (exclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-10-24T00:00:00Z"
+        - name: end_timestamp
+          in: query
+          description: Slicing end timestamp (inclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-10-24T23:59:59Z"
+      responses:
+        '200':
+          description: Successfully retrieved activity events
+          content:
+            application/json:
               schema:
-                type: string
-                format: date-time
-                example: "2026-10-24T00:00:00Z"
-            - name: end_timestamp
-              in: query
-              description: Slicing end timestamp (inclusive)
-              required: true
-              schema:
-                type: string
-                format: date-time
-                example: "2026-10-24T23:59:59Z"
-          responses:
-            '200':
-              description: Successfully retrieved activity events
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ActivityRecord'
-            '400':
-              description: Invalid request parameters
-
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityRecord'
+        '400':
+          description: Invalid request parameters
 
   /health/exercises:
-    post:
-      summary: Stores an exercise session
-      operationId: storage.store_exercises
-      description: Persists an exercise record to SQLite
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExerciseRecord'
-      responses:
-        '201':
-          description: Exercise record successfully saved
-        '400':
-          description: 'invalid input, object invalid'
-
     get:
-          summary: Gets exercise events recorded within a timestamp range
-          operationId: storage.get_exercises
-          description: Retrieves exercise records where recorded_timestamp > start_timestamp and recorded_timestamp <= end_timestamp
-          parameters:
-            - name: start_timestamp
-              in: query
-              description: Slicing start timestamp (exclusive)
-              required: true
+      summary: Gets exercise events recorded within a timestamp range
+      operationId: storage.get_exercises
+      description: Retrieves exercise records where recorded_timestamp > start_timestamp and recorded_timestamp <= end_timestamp
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: Slicing start timestamp (exclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-10-24T00:00:00Z"
+        - name: end_timestamp
+          in: query
+          description: Slicing end timestamp (inclusive)
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2026-10-24T23:59:59Z"
+      responses:
+        '200':
+          description: Successfully retrieved exercise events
+          content:
+            application/json:
               schema:
-                type: string
-                format: date-time
-                example: "2026-10-24T00:00:00Z"
-            - name: end_timestamp
-              in: query
-              description: Slicing end timestamp (inclusive)
-              required: true
-              schema:
-                type: string
-                format: date-time
-                example: "2026-10-24T23:59:59Z"
-          responses:
-            '200':
-              description: Successfully retrieved exercise events
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ExerciseRecord'
-            '400':
-              description: Invalid request parameters
-
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExerciseRecord'
+        '400':
+          description: Invalid request parameters
 
 components:
   schemas:

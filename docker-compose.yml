@@ -1,6 +1,7 @@
 #sql persistent dadatta
 volumes:
   mysql_data:
+  redpanda:
 
 services:
   db:
@@ -31,19 +32,38 @@ services:
       db:
         condition: service_healthy
 
+  storage_worker:
+      build:
+        context: Storage
+        dockerfile: Dockerfile
+      command: ["python", "storage_worker.py"]
+      restart: always
+      environment:
+        DATABASE_URL: mysql+pymysql://shsu:password@db:3306/fitness_db
+        KAFKA_BROKER: redpanda:9092
+        KAFKA_TOPIC_ACTIVITY: activity
+        KAFKA_TOPIC_EXERCISES: exercises
+      depends_on:
+        db:
+          condition: service_healthy
+        redpanda:
+          condition: service_started
+
   receiver:
-    build:
-      context: Receiver
-      dockerfile: Dockerfile
-    restart: always
-    environment:
-      STORAGE_SERVICE_URL: http://storage:8090
-    depends_on:
-      - storage
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./Receiver/app.log:/app/app.log
+      build:
+        context: Receiver
+        dockerfile: Dockerfile
+      restart: always
+      environment:
+        KAFKA_BROKER: redpanda:9092
+        KAFKA_TOPIC_ACTIVITY: activity
+        KAFKA_TOPIC_EXERCISES: exercises
+      depends_on:
+        - redpanda
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./Receiver/app.log:/app/app.log
 
   processing:
     build:
@@ -58,3 +78,43 @@ services:
       - "8100:8100"
     volumes:
       - ./Processing/stats.json:/app/stats.json
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v26.1.10
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --mode dev-container
+      - --smp 1
+      - --default-log-level=info
+      - --set redpanda.auto_create_topics_enabled=true
+    volumes:
+      - redpanda:/var/lib/redpanda/data
+
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:v3.7.4
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+        schemaRegistry:
+          enabled: true
+          urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
+    ports:
+      - "8085:8080"
+    depends_on:
+      - redpanda

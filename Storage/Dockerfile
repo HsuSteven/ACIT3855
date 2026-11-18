@@ -5,6 +5,7 @@ WORKDIR /app
 RUN pip install --no-cache-dir \
     "connexion[uvicorn]" \
     "connexion[swagger-ui]" \
+    confluent-kafka \
     sqlalchemy \
     pymysql \
     pyyaml

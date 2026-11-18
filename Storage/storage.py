@@ -4,7 +4,6 @@ import logging.config
 from datetime import datetime
 import yaml
 import connexion
-from connexion import NoContent
 from models import make_session, Activity, Exercise
 
 # Load logging configuration
@@ -26,48 +25,9 @@ def use_db_session(func):
     return wrapper
 
 
-# POST endpoints
-@use_db_session
-def store_activity(session, body):
-    activity_record = Activity(
-        trace_id=body["trace_id"],
-        device_id=body["device_id"],
-        timestamp=body["timestamp"],
-        step_count=body["step_count"],
-        calories_burned=body["calories_burned"],
-        avg_heart_rate=body["avg_heart_rate"],
-    )
-    session.add(activity_record)
-    session.commit()
-    trace_id = body["trace_id"]
-    logger.debug(f"Stored event 'activity' with a trace id of {trace_id}")
-    return NoContent, 201
-
-
-@use_db_session
-def store_exercises(session, body):
-    exercise_record = Exercise(
-        trace_id=body["trace_id"],
-        device_id=body["device_id"],
-        timestamp=body["timestamp"],
-        calories_burned=body["calories_burned"],
-        duration=body["duration"],
-        exercise_type=body["exercise_type"],
-        avg_heart_rate=body["avg_heart_rate"],
-    )
-    session.add(exercise_record)
-    session.commit()
-    trace_id = body["trace_id"]
-    logger.debug(f"Stored event 'exercises' with a trace id of {trace_id}")
-    return NoContent, 201
-
-
 # GET endpoints
-
 @use_db_session
 def get_activity(session, start_timestamp, end_timestamp):
-    #Retrieves activity events where start_timestamp < recorded_timestamp <= end_timestamp
-    # Parse ISO strings into datetime objects
     start_dt = (
         datetime.fromisoformat(start_timestamp.replace("Z", "+00:00"))
         if isinstance(start_timestamp, str)
@@ -79,7 +39,6 @@ def get_activity(session, start_timestamp, end_timestamp):
         else end_timestamp
     )
 
-    # Half-open interval query on recorded_timestamp to avoid duplicate or missed records
     results = (
         session.query(Activity)
         .filter(Activity.recorded_timestamp > start_dt)
@@ -98,8 +57,6 @@ def get_activity(session, start_timestamp, end_timestamp):
 
 @use_db_session
 def get_exercises(session, start_timestamp, end_timestamp):
-
-    #Retrieves exercise events where start_timestamp < recorded_timestamp <= end_timestamp
     start_dt = (
         datetime.fromisoformat(start_timestamp.replace("Z", "+00:00"))
         if isinstance(start_timestamp, str)
