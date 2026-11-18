@@ -1,5 +1,10 @@
 #!/bin/bash
 set -e
+echo "=== 0. Resetting Kafka / Redpanda Topics ==="
+docker compose stop storage_worker
+docker compose exec redpanda rpk topic delete activity exercises
+docker compose exec redpanda rpk topic create activity exercises
+docker compose start storage_worker
 
 echo "=== 1. Resetting MySQL Database Tables ==="
 docker compose exec storage python drop_tables.py
