@@ -48,7 +48,7 @@ class Exercise(Base):
     __tablename__ = "exercises"
 
     id = mapped_column(Integer, primary_key=True)
-    trace_id = mapped_column(BigInteger)
+    trace_id = mapped_column(BigInteger, unique=True)
     device_id = mapped_column(String(50))
     timestamp = mapped_column(String(50))
     calories_burned = mapped_column(Integer)

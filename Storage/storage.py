@@ -4,6 +4,7 @@ import logging.config
 from datetime import datetime
 import yaml
 import connexion
+from sqlalchemy.exc import OperationalError
 from models import make_session, Activity, Exercise
 
 # Load logging configuration
@@ -20,6 +21,9 @@ def use_db_session(func):
         session = make_session()
         try:
             return func(session, *args, **kwargs)
+        except OperationalError:
+            logger.error("Database unavailable during GET request")
+            return {"error": "Database temporarily unavailable"}, 503
         finally:
             session.close()
     return wrapper

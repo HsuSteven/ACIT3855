@@ -19,6 +19,8 @@ paths:
           description: Activity event successfully received
         '400':
           description: 'invalid input, object invalid'
+        '503':
+          description: Service temporarily unavailable
     
   /health/exercises:
     post:
@@ -35,6 +37,8 @@ paths:
           description: Exercise event successfully received
         '400':
           description: 'invalid input, object invalid'
+        '503':
+          description: Service temporarily unavailable
 
 components:
   schemas:

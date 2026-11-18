@@ -38,6 +38,8 @@ paths:
                   $ref: '#/components/schemas/ActivityRecord'
         '400':
           description: Invalid request parameters
+        '503':
+          description: Service temporarily unavailable
 
   /health/exercises:
     get:
@@ -72,6 +74,8 @@ paths:
                   $ref: '#/components/schemas/ExerciseRecord'
         '400':
           description: Invalid request parameters
+        '503':
+          description: Service temporarily unavailable
 
 components:
   schemas:
