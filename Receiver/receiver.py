@@ -11,14 +11,14 @@ from connexion import NoContent, request
 from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaConnectionError, KafkaError
 
-# 1. Load logging configuration
+# logging configuration
 with open("log_conf.yml", "r") as f:
     LOG_CONFIG = yaml.safe_load(f.read())
 logging.config.dictConfig(LOG_CONFIG)
 
 logger = logging.getLogger("receiver")
 
-# 2. Kafka / Redpanda configuration
+# edpanda configuration
 KAFKA_BROKER = os.getenv("KAFKA_BROKER", "redpanda:9092")
 KAFKA_TOPIC_ACTIVITY = os.getenv("KAFKA_TOPIC_ACTIVITY", "activity")
 KAFKA_TOPIC_EXERCISES = os.getenv("KAFKA_TOPIC_EXERCISES", "exercises")

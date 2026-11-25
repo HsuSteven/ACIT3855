@@ -1,6 +1,6 @@
 import asyncio
 from contextlib import asynccontextmanager
-from datetime import datetime, UTC
+from datetime import datetime, UTC, timedelta
 from pathlib import Path
 import json
 import logging
@@ -63,7 +63,7 @@ async def update_loop():
     while True:
         try:
             stats = load_statistics()
-            now_str = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")
+            now_str = (datetime.now(UTC) - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S.%f")
 
             # Activity processing
             act_start = stats.get("last_updated_activity", "2026-01-01T00:00:00.000000")
